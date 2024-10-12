@@ -1,5 +1,5 @@
 import { useState } from "react";
-export default function Player({ name, symbol }) {
+export default function Player({ name, symbol, isActive }) {
   const [isEdyting, setIsEdyting] = useState(false);
   const [dynamicName, setDynamicName] = useState(name);
 
@@ -15,7 +15,7 @@ export default function Player({ name, symbol }) {
   );
 
   return (
-    <li>
+    <li className={isActive ? "active" : undefined}>
       <span className="player">
         {playerPlaceHolder}
         <span className="player-symbol">{symbol}</span>

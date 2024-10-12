@@ -1,21 +1,13 @@
-import { useState } from "react";
 const initialGameBoard = [
   [null, null, null],
   [null, null, null],
   [null, null, null],
 ];
 
-export default function GameBoard() {
-  const [gameBoard, setGameBoard] = useState(initialGameBoard);
-
-  function UpdateGameBoard(row, column) {
-    setGameBoard((prevGameBoard) => {
-      const UpdateBoard = [
-        ...prevGameBoard.map((innerArrey) => [...innerArrey]),
-      ];
-      UpdateBoard[row][column] = "X";
-      return UpdateBoard;
-    });
+export default function GameBoard({ OnSelectedSquere, turns }) {
+  let gameBoard = initialGameBoard;
+  for (const turn of turns) {
+    gameBoard[turn.square.row][turn.square.col] = turn.Player;
   }
 
   return (
@@ -25,7 +17,7 @@ export default function GameBoard() {
           <ol>
             {row.map((playerSymbol, Pindex) => (
               <li key={Pindex}>
-                <button onClick={() => UpdateGameBoard(rowIndex, Pindex)}>
+                <button onClick={() => OnSelectedSquere(rowIndex, Pindex)}>
                   {playerSymbol}
                 </button>
               </li>
