@@ -12,10 +12,15 @@ const initialGameBoard = [
 ];
 
 function App() {
+  const [Players, setPlayers] = useState({
+    X: "Player 1 ",
+    O: "Player 2 ",
+  });
+
   const [gameTurns, setGameTurns] = useState([]);
   let activePlayer = gameTurns.length % 2 == 1 ? "O" : "X";
 
-  let gameBoard = initialGameBoard;
+  let gameBoard = [...initialGameBoard.map((a) => [...a])];
   for (const turn of gameTurns) {
     gameBoard[turn.square.row][turn.square.col] = turn.Player;
   }
@@ -37,12 +42,23 @@ function App() {
     const thirdSqr = gameBoard[comb[2].row][comb[2].column];
 
     if (firstSqr && firstSqr === secSqr && secSqr === thirdSqr) {
-      winner = firstSqr;
+      winner = Players[firstSqr];
     }
   }
 
   if (!winner && gameTurns.length === 9) {
     draw = true;
+  }
+
+  function HandleRestart() {
+    setGameTurns([]);
+  }
+
+  function HandlePlayerNameChange(symbol, newName) {
+    console.log(symbol, newName);
+    setPlayers((prevNames) => {
+      return { ...prevNames, [symbol]: newName };
+    });
   }
 
   return (
@@ -53,14 +69,18 @@ function App() {
             name={"player 1"}
             symbol={"X"}
             isActive={activePlayer === "X"}
+            NameChange={HandlePlayerNameChange}
           />
           <Player
             name={"player 2"}
             symbol={"O"}
             isActive={activePlayer === "O"}
+            NameChange={HandlePlayerNameChange}
           />
         </ol>
-        {(winner || draw) && <GameOver winner={winner} />}
+        {(winner || draw) && (
+          <GameOver winner={winner} restart={HandleRestart} />
+        )}
         <GameBoard
           gameBoard={gameBoard}
           OnSelectedSquere={handleSelectedSquare}
